@@ -6,19 +6,11 @@
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution.
 
-import unittest
-from easy_table import (get_structure, count_rows,
-                        count_cols, max_cell_length,
-                        Table)
+from base import BaseTableTestCase
+from rstable.utils import count_rows, count_cols
 
 
-class TableTestCase(unittest.TestCase):
-    def setUp(self):
-        source = 'test.rst'
-        self.structure = get_structure(source)
-        self.table = Table(source)
-        self.source = source
-
+class TableTestCase(BaseTableTestCase):
     def testGetTableStructure(self):
         self.assertEqual(
             [
@@ -44,21 +36,6 @@ class TableTestCase(unittest.TestCase):
             cols
         )
 
-    def testMaxLen(self):
-        self.assertEqual(
-            4,
-            max_cell_length(self.structure, 2)
-
-        )
-        self.assertEqual(
-            4,
-            max_cell_length(self.structure, 1)
-        )
-        self.assertEqual(
-            2,
-            max_cell_length(self.structure, 0)
-        )
-
     def testTableAsClass(self):
         """
         Test case for easy table Table class
@@ -82,8 +59,7 @@ class TableTestCase(unittest.TestCase):
 
     def testCreateTable(self):
         self.assertEqual(
-            """
-+----+------+------+
+            """+----+------+------+
 | id | code | name |
 +====+======+======+
 |  1 |    2 | test |
