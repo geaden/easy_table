@@ -8,9 +8,8 @@ Create rst tables with ease.
 **Example**
 ===========
 
-Source table:
-_____________
-:
+Source table::
+
 :stable:
 id code name
 1 2 test
@@ -18,9 +17,8 @@ id code name
 3 4 sub
 :etable:
 
-Result table:
-_____________
-:
+Result table::
+
 +----+------+------+
 | id | code | name |
 +====+======+======+
