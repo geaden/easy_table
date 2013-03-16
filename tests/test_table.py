@@ -43,15 +43,14 @@ class TableTestCase(unittest.TestCase):
     def testMaxLen(self):
         self.assertEqual(
             4,
-            max_cell_length(self.structure, 3)
+            max_cell_length(self.structure, 2)
 
         )
         self.assertEqual(
             4,
-            max_cell_length(self.structure, 2)
+            max_cell_length(self.structure, 1)
         )
         self.assertEqual(
             2,
-            max_cell_length(self.structure, 1)
+            max_cell_length(self.structure, 0)
         )
-

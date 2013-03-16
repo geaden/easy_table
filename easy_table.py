@@ -48,7 +48,10 @@ def get_table(source):
 
 
 def get_rows(table):
-    return table.split('\n')
+    """
+    Get rows of given table
+    """
+    return table.split('\n')[1:-1]
 
 
 def get_structure(source):
@@ -56,15 +59,14 @@ def get_structure(source):
     Get structure of table from given source
     """
     table = get_table(source)[0]
-    rows = get_rows(table)[1:-1]
-    structure = [() for i in range(len(rows))]
+    rows = get_rows(table)
+    structure = [(i + 1,) for i in range(len(rows))]
     for idx, row in enumerate(rows):
-        structure[idx] += (idx + 1,)
-        cells = row.split()
-        tcells = []
-        for cell in cells:
-            tcells.append(len(cell))
-        structure[idx] += (tcells,)
+        structure[idx] += (
+                           [len(cell)
+                            for cell in row.split()
+                           ],
+        )
     return structure
 
 
@@ -72,7 +74,7 @@ def max_cell_length(structure, column):
     """
     Get max length of all cells in one column
     """
-    return max(row[1][column - 1] for row in structure)
+    return max(row[1][column] for row in structure)
 
 
 def count_rows(structure):
