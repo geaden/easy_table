@@ -10,12 +10,12 @@ Create rst tables with ease.
 
 Source table::
 
-:stable:
+`:stable:`
 id code name
 1 2 test
 2 3 py
 3 4 sub
-:etable:
+`:etable:`
 
 Result table::
 
