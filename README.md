@@ -3,6 +3,8 @@ Easy rST table
 
 It's a script of generating rst-structrured tables.
 
+Create rst tables with ease.
+
 **Example**
 ===========
 
@@ -40,7 +42,7 @@ I found it useful for generating sceleton of table.
 
 It leaves rest content of the file. Just rewrites section marked with `:stable:` and `:etable:`
 
-But you use it on your own risk, a I have no warranty that your data won't be corrupted after
+But remember you use it on your own risk, as I have no warranty that your data won't be corrupted after
 processing.
 
 TODO
@@ -48,4 +50,5 @@ TODO
 
 - Support multiple tables in file
 - Support cells containing whitespases
+- Support type. Currently only Grid type is supported
 
