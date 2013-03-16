@@ -45,7 +45,6 @@ setup(
     author_email='denisovgena@gmail.com',
     license='BSD',
     url='https://github.com/geaden/easy_table',
-
     test_suite='tests',
     zip_safe=True,
     packages=find_packages(),
