@@ -10,7 +10,7 @@ Create rst tables with ease.
 
 Source table:
 _____________
-
+:
 :stable:
 id code name
 1 2 test
@@ -20,7 +20,7 @@ id code name
 
 Result table:
 _____________
-
+:
 +----+------+------+
 | id | code | name |
 +====+======+======+

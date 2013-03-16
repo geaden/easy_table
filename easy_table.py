@@ -53,6 +53,7 @@ def create_table(source, type=GRID, verbose=False):
 if __name__ == '__main__':
     if not sys.argv[1:]:
         print HELP
+        sys.exit(0)
     if sys.argv[1].startswith('-'):
         if '-h' in sys.argv[1] or '--help' in sys.argv[1:]:
             print HELP
