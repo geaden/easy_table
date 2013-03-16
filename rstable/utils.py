@@ -6,6 +6,7 @@
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution.
 
+import sys
 from config import START, END
 
 
@@ -69,8 +70,9 @@ def get_table(source):
         src = f.read()
     start = src.find(START)
     end = src.find(END)
-    if not start or end:
-        raise ValueError("Please check your source")
+    if start == -1 or end == -1:
+        sys.exit("Please check your source\n"
+                 "No table found.")
     before = src[:start]
     after = src[end + len(END):]
     table = src[start + len(START):end]
