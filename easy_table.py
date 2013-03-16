@@ -17,20 +17,49 @@ START = ':stable:'
 END = ':etable:'
 
 
-def gen_header(header):
-    header = header.split()
-    thead = list()
-    thead.append('+' + '+'.join([(len(h) + 2) * '-' for h in header]) + '+')
-    thead.append('|' + '|'.join([ ' %s ' % h for h in header]) + '|')
-    thead.append('+' + '+'.join([(len(h) + 2) * '=' for h in header]) + '+')
-    return '\n'.join(thead), thead
+def draw_line(t, row, table, fillchar='-'):
+    """
+    Draw table line
 
-def gen_row(row, header):
-    tr = row.split()
-    thead = header.split('+')[1:-1]
+    :param t: list to append line
+    :param table: :class:`Table`
+    :param fillchar: character to be filled between `+` signs
+    """
+    row = row.split()
+    t.append('+' + '+'.join(
+        (table.max_cell_len(idx) + 2) * fillchar
+                             for idx, h in enumerate(row)
+    ) + '+')
+
+def put_cells(t, row, table, just='rjust'):
+    row = row.split()
+    print [table.max_cell_len(idx) + 2 for idx, h in enumerate(row)]
+    command = '''t.append('|' + '|'.join(
+                 ' %s '.{0}(table.max_cell_len(idx)) % r for idx, r in enumerate(row))
+                 + '|')'''.format(just)
+    eval(command, {'t': t, 'table': table, 'row': row})
+
+
+def gen_header(table):
+    """
+    Formats header accorging to rST
+
+    :params table: :class:`Table`
+    :returns: str
+    """
+    thead = list()
+    header = table.header
+    draw_line(thead, header, table)
+    put_cells(thead, header, table)
+    draw_line(thead, header, table, fillchar='=')
+    return '\n'.join(thead)
+
+
+def gen_rows(table):
     trr = list()
-    trr.append('|' + '|'.join(['%s%s ' % ( ' ' * (len(thead[tr.index(r)]) - 2), r,) for r in tr]) + '|')
-    trr.append(header)
+    for row in table.rows[1:]:
+        put_cells(trr, row, table, just='ljust')
+        draw_line(trr, row, table)
     return '\n'.join(trr)
 
 
@@ -43,7 +72,7 @@ def get_table(source):
     start = src.find(START)
     end = src.find(END)
     before = src[:start]
-    after = src[end+len(END):]
+    after = src[end + len(END):]
     table = src[start + len(START):end]
     return table, before, after
 
@@ -96,25 +125,6 @@ def count_cols(structure):
     return len(structure[0][1])
 
 
-class Header(object):
-    """
-    Header class
-    """
-    def __init__(self, rows):
-        self.header = rows[0]
-
-    def __str__(self):
-        return self.header
-
-    def __repr__(self):
-        return '<%s %s>' % (
-            self.__class__.__name__,
-            self.header)
-
-    def to_rst(self):
-        return gen_header(self.header)
-
-
 class Table(object):
     """
     Generates table from given source
@@ -132,13 +142,40 @@ class Table(object):
         """
         return get_structure(self.source)
 
+    def max_cell_len(self, column):
+            return max_cell_length(self.structure(), column)
+
     @property
     def header(self):
-        return Header(self.rows)
+        return Header(self)
 
     @property
     def rows(self):
         return get_rows(self.table())
+
+    def create(self):
+        return self.header.to_rst() + gen_rows(self)
+
+
+class Header(object):
+    """
+    Header class
+    """
+    def __init__(self, table):
+        self.table = table
+        self.header = table.rows[0]
+
+    def __str__(self):
+        return self.header
+
+    def __repr__(self):
+        return self.__str__()
+
+    def split(self):
+        return self.header.split()
+
+    def to_rst(self):
+        return gen_header(self.table)
 
 
 def gen_table(source, type=GRID):

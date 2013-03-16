@@ -76,11 +76,22 @@ class TableTestCase(unittest.TestCase):
 
     def testRstTableHeader(self):
         self.assertEqual(
-            '''
+            '+----+------+------+\n| id | code | name |\n+====+======+======+',
+            self.table.header.to_rst()
+        )
+
+    def testCreateTable(self):
+        self.assertEqual(
+            """
             +----+------+------+
             | id | code | name |
             +====+======+======+
-            ''',
-            self.table.header.to_rst()
-
+            |  1 |    2 | test |
+            +----+------+------+
+            |  2 |    3 |   py |
+            +----+------+------+
+            |  3 |    4 |  sub |
+            +----+------+------+
+            """,
+            self.table.create()
         )
