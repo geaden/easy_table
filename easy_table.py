@@ -31,11 +31,11 @@ def draw_line(t, row, table, fillchar='-'):
                              for idx, h in enumerate(row)
     ) + '+')
 
-def put_cells(t, row, table, just='rjust'):
+
+def put_cells(t, row, table, just='ljust'):
     row = row.split()
-    print [table.max_cell_len(idx) + 2 for idx, h in enumerate(row)]
     command = '''t.append('|' + '|'.join(
-                 ' %s '.{0}(table.max_cell_len(idx)) % r for idx, r in enumerate(row))
+                 (' %s ' % r).{0}(table.max_cell_len(idx) + 2) for idx, r in enumerate(row))
                  + '|')'''.format(just)
     eval(command, {'t': t, 'table': table, 'row': row})
 
@@ -58,7 +58,7 @@ def gen_header(table):
 def gen_rows(table):
     trr = list()
     for row in table.rows[1:]:
-        put_cells(trr, row, table, just='ljust')
+        put_cells(trr, row, table, just='rjust')
         draw_line(trr, row, table)
     return '\n'.join(trr)
 
@@ -154,7 +154,7 @@ class Table(object):
         return get_rows(self.table())
 
     def create(self):
-        return self.header.to_rst() + gen_rows(self)
+        return self.header.to_rst() + '\n' + gen_rows(self)
 
 
 class Header(object):
