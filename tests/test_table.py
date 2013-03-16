@@ -7,13 +7,17 @@
 # you should have received as part of this distribution.
 
 import unittest
-from easy_table import get_structure, count_rows, count_cols, max_cell_length
+from easy_table import (get_structure, count_rows,
+                        count_cols, max_cell_length,
+                        Table)
 
 
 class TableTestCase(unittest.TestCase):
     def setUp(self):
-        table = 'test.rst'
-        self.structure = get_structure(table)
+        source = 'test.rst'
+        self.structure = get_structure(source)
+        self.table = Table(source)
+        self.source = source
 
     def testGetTableStructure(self):
         self.assertEqual(
@@ -53,4 +57,30 @@ class TableTestCase(unittest.TestCase):
         self.assertEqual(
             2,
             max_cell_length(self.structure, 0)
+        )
+
+    def testTableAsClass(self):
+        """
+        Test case for easy table Table class
+        """
+        self.assertEqual(
+            self.structure,
+            self.table.structure()
+        )
+
+    def testTableHeader(self):
+        self.assertEqual(
+            'id code name',
+            self.table.header.__str__()
+        )
+
+    def testRstTableHeader(self):
+        self.assertEqual(
+            '''
+            +----+------+------+
+            | id | code | name |
+            +====+======+======+
+            ''',
+            self.table.header.to_rst()
+
         )

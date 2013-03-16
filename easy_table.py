@@ -18,6 +18,7 @@ END = ':etable:'
 
 
 def gen_header(header):
+    header = header.split()
     thead = list()
     thead.append('+' + '+'.join([(len(h) + 2) * '-' for h in header]) + '+')
     thead.append('|' + '|'.join([ ' %s ' % h for h in header]) + '|')
@@ -52,6 +53,10 @@ def get_rows(table):
     Get rows of given table
     """
     return table.split('\n')[1:-1]
+
+
+def get_header(rows):
+    return rows[0]
 
 
 def get_structure(source):
@@ -89,6 +94,51 @@ def count_cols(structure):
     Count number of columns in table
     """
     return len(structure[0][1])
+
+
+class Header(object):
+    """
+    Header class
+    """
+    def __init__(self, rows):
+        self.header = rows[0]
+
+    def __str__(self):
+        return self.header
+
+    def __repr__(self):
+        return '<%s %s>' % (
+            self.__class__.__name__,
+            self.header)
+
+    def to_rst(self):
+        return gen_header(self.header)
+
+
+class Table(object):
+    """
+    Generates table from given source
+    """
+    def __init__(self, source, type=GRID):
+        self.source = source
+        self.type = type
+
+    def table(self):
+        return get_table(self.source)[0]
+
+    def structure(self):
+        """
+        Structure of table
+        """
+        return get_structure(self.source)
+
+    @property
+    def header(self):
+        return Header(self.rows)
+
+    @property
+    def rows(self):
+        return get_rows(self.table())
 
 
 def gen_table(source, type=GRID):
